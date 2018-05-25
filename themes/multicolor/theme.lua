@@ -109,26 +109,26 @@ theme.cal = lain.widget.calendar({
 })
 
 -- Weather
-local weathericon = wibox.widget.imagebox(theme.widget_weather)
-theme.weather = lain.widget.weather({
-    city_id = 2643743, -- placeholder (London)
-    notification_preset = { font = "xos4 Terminus 10", fg = theme.fg_normal },
-    weather_na_markup = markup.fontfg(theme.font, "#eca4c4", "N/A "),
-    settings = function()
-        descr = weather_now["weather"][1]["description"]:lower()
-        units = math.floor(weather_now["main"]["temp"])
-        widget:set_markup(markup.fontfg(theme.font, "#eca4c4", descr .. " @ " .. units .. "°C "))
-    end
-})
+--local weathericon = wibox.widget.imagebox(theme.widget_weather)
+--theme.weather = lain.widget.weather({
+--    city_id = 2643743, -- placeholder (London)
+--    notification_preset = { font = "xos4 Terminus 10", fg = theme.fg_normal },
+--    weather_na_markup = markup.fontfg(theme.font, "#eca4c4", "N/A "),
+--    settings = function()
+--        descr = weather_now["weather"][1]["description"]:lower()
+--        units = math.floor(weather_now["main"]["temp"])
+--        widget:set_markup(markup.fontfg(theme.font, "#eca4c4", descr .. " @ " .. units .. "°C "))
+--    end
+--})
 
 -- / fs
-local fsicon = wibox.widget.imagebox(theme.widget_fs)
-theme.fs = lain.widget.fs({
-    notification_preset = { font = "xos4 Terminus 10", fg = theme.fg_normal },
-    settings  = function()
-        widget:set_markup(markup.fontfg(theme.font, "#80d9d8", fs_now.used .. "% "))
-    end
-})
+--local fsicon = wibox.widget.imagebox(theme.widget_fs)
+--theme.fs = lain.widget.fs({
+--    notification_preset = { font = "xos4 Terminus 10", fg = theme.fg_normal },
+--    settings  = function()
+--        widget:set_markup(markup.fontfg(theme.font, "#80d9d8", fs_now.used .. "% "))
+--    end
+--})
 
 --[[ Mail IMAP check
 -- commented because it needs to be set before use
@@ -170,18 +170,18 @@ local temp = lain.widget.temp({
 })
 
 -- Battery
-local baticon = wibox.widget.imagebox(theme.widget_batt)
-local bat = lain.widget.bat({
-    settings = function()
-        local perc = bat_now.perc ~= "N/A" and bat_now.perc .. "%" or bat_now.perc
+--local baticon = wibox.widget.imagebox(theme.widget_batt)
+--local bat = lain.widget.bat({
+--    settings = function()
+--        local perc = bat_now.perc ~= "N/A" and bat_now.perc .. "%" or bat_now.perc
 
-        if bat_now.ac_status == 1 then
-            perc = perc .. " plug"
-        end
+--        if bat_now.ac_status == 1 then
+--            perc = perc .. " plug"
+--        end
 
-        widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, perc .. " "))
-    end
-})
+--        widget:set_markup(markup.fontfg(theme.font, theme.fg_normal, perc .. " "))
+--    end
+--})
 
 -- ALSA volume
 local volicon = wibox.widget.imagebox(theme.widget_vol)
@@ -201,11 +201,11 @@ local netdowninfo = wibox.widget.textbox()
 local netupicon = wibox.widget.imagebox(theme.widget_netup)
 local netupinfo = lain.widget.net({
     settings = function()
-        if iface ~= "network off" and
-           string.match(theme.weather.widget.text, "N/A")
-        then
-            theme.weather.update()
-        end
+        --if iface ~= "network off" and
+        --   string.match(theme.weather.widget.text, "N/A")
+        --then
+        --    theme.weather.update()
+        --end
 
         widget:set_markup(markup.fontfg(theme.font, "#e54c62", net_now.sent .. " "))
         netdowninfo:set_markup(markup.fontfg(theme.font, "#87af5f", net_now.received .. " "))
@@ -309,14 +309,14 @@ function theme.at_screen_connect(s)
             memory.widget,
             cpuicon,
             cpu.widget,
-            fsicon,
-            theme.fs.widget,
-            weathericon,
-            theme.weather.widget,
+            --fsicon,
+            --theme.fs.widget,
+            --weathericon,
+            --theme.weather.widget,
             tempicon,
             temp.widget,
-            baticon,
-            bat.widget,
+            --baticon,
+            --bat.widget,
             clockicon,
             mytextclock,
         },
