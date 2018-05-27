@@ -21,6 +21,7 @@ local freedesktop   = require("freedesktop")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
 local tyrannical    = require("tyrannical")
+local modalbind     = require("modalbind")
 -- }}}
 
 -- {{{ Error handling
@@ -246,7 +247,7 @@ tyrannical.tags = {
         volatile    = true,
         class       = {
             "navigator", "firefox", "Navigator", "Vimperator", "Firefox", "Chrome", "google-chrome",
-            "chromium", "conkeror", "luakit"
+            "chromium", "conkeror", "luakit", "Slack", "Zotero"
         },
         position    = 2
     },
@@ -393,6 +394,17 @@ root.buttons(my_table.join(
     awful.button({ }, 5, awful.tag.viewprev)
 ))
 -- }}}
+
+
+-- MPD modal bindings
+local mpdmap = {
+	{ "s", function() awful.util.spawn("mpd") end,        "start MPD" },
+	{ "S", function() awful.util.spawn("mpd --kill") end, "kill MPD" },
+	{ "separator", "Playback" },
+	{ "x", function() awful.util.spawn("mpc toggle") end, "Toggle" },
+	{ "n", function() awful.util.spawn("mpc next") end,   "Next" },
+	{ "p", function() awful.util.spawn("mpc prev") end,   "Prev" },
+}
 
 -- {{{ Key bindings
 globalkeys = my_table.join(
@@ -567,76 +579,79 @@ globalkeys = my_table.join(
     awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("xbacklight -dec 10") end,
               {description = "-10%", group = "hotkeys"}),
 
-    -- ALSA volume control
-    awful.key({ altkey }, "Up",
-        function ()
-            os.execute(string.format("amixer -q set %s 1%%+", beautiful.volume.channel))
-            beautiful.volume.update()
-        end,
-        {description = "volume up", group = "hotkeys"}),
-    awful.key({ altkey }, "Down",
-        function ()
-            os.execute(string.format("amixer -q set %s 1%%-", beautiful.volume.channel))
-            beautiful.volume.update()
-        end,
-        {description = "volume down", group = "hotkeys"}),
-    awful.key({ altkey }, "m",
-        function ()
-            os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
-            beautiful.volume.update()
-        end,
-        {description = "toggle mute", group = "hotkeys"}),
-    awful.key({ altkey, "Control" }, "m",
-        function ()
-            os.execute(string.format("amixer -q set %s 100%%", beautiful.volume.channel))
-            beautiful.volume.update()
-        end,
-        {description = "volume 100%", group = "hotkeys"}),
-    awful.key({ altkey, "Control" }, "0",
-        function ()
-            os.execute(string.format("amixer -q set %s 0%%", beautiful.volume.channel))
-            beautiful.volume.update()
-        end,
-        {description = "volume 0%", group = "hotkeys"}),
+    -- MPD modal binding
+    awful.key({ modkey }, "m", function() modalbind.grab(mpdmap, "MPD", false) end),
 
-    -- MPD control
-    awful.key({ altkey, "Control" }, "Up",
-        function ()
-            awful.spawn.with_shell("mpc toggle")
-            beautiful.mpd.update()
-        end,
-        {description = "mpc toggle", group = "widgets"}),
-    awful.key({ altkey, "Control" }, "Down",
-        function ()
-            awful.spawn.with_shell("mpc stop")
-            beautiful.mpd.update()
-        end,
-        {description = "mpc stop", group = "widgets"}),
-    awful.key({ altkey, "Control" }, "Left",
-        function ()
-            awful.spawn.with_shell("mpc prev")
-            beautiful.mpd.update()
-        end,
-        {description = "mpc prev", group = "widgets"}),
-    awful.key({ altkey, "Control" }, "Right",
-        function ()
-            awful.spawn.with_shell("mpc next")
-            beautiful.mpd.update()
-        end,
-        {description = "mpc next", group = "widgets"}),
-    awful.key({ altkey }, "0",
-        function ()
-            local common = { text = "MPD widget ", position = "top_middle", timeout = 2 }
-            if beautiful.mpd.timer.started then
-                beautiful.mpd.timer:stop()
-                common.text = common.text .. lain.util.markup.bold("OFF")
-            else
-                beautiful.mpd.timer:start()
-                common.text = common.text .. lain.util.markup.bold("ON")
-            end
-            naughty.notify(common)
-        end,
-        {description = "mpc on/off", group = "widgets"}),
+    -- ALSA volume control
+    --awful.key({ altkey }, "Up",
+    --    function ()
+    --        os.execute(string.format("amixer -q set %s 1%%+", beautiful.volume.channel))
+    --        beautiful.volume.update()
+    --    end,
+    --    {description = "volume up", group = "hotkeys"}),
+    --awful.key({ altkey }, "Down",
+    --    function ()
+    --        os.execute(string.format("amixer -q set %s 1%%-", beautiful.volume.channel))
+    --        beautiful.volume.update()
+    --    end,
+    --    {description = "volume down", group = "hotkeys"}),
+    --awful.key({ altkey }, "m",
+    --    function ()
+    --        os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
+    --        beautiful.volume.update()
+    --    end,
+    --    {description = "toggle mute", group = "hotkeys"}),
+    --awful.key({ altkey, "Control" }, "m",
+    --    function ()
+    --        os.execute(string.format("amixer -q set %s 100%%", beautiful.volume.channel))
+    --        beautiful.volume.update()
+    --    end,
+    --    {description = "volume 100%", group = "hotkeys"}),
+    --awful.key({ altkey, "Control" }, "0",
+    --    function ()
+    --        os.execute(string.format("amixer -q set %s 0%%", beautiful.volume.channel))
+    --        beautiful.volume.update()
+    --    end,
+    --    {description = "volume 0%", group = "hotkeys"}),
+
+    ---- MPD control
+    --awful.key({ altkey, "Control" }, "Up",
+    --    function ()
+    --        awful.spawn.with_shell("mpc toggle")
+    --        beautiful.mpd.update()
+    --    end,
+    --    {description = "mpc toggle", group = "widgets"}),
+    --awful.key({ altkey, "Control" }, "Down",
+    --    function ()
+    --        awful.spawn.with_shell("mpc stop")
+    --        beautiful.mpd.update()
+    --    end,
+    --    {description = "mpc stop", group = "widgets"}),
+    --awful.key({ altkey, "Control" }, "Left",
+    --    function ()
+    --        awful.spawn.with_shell("mpc prev")
+    --        beautiful.mpd.update()
+    --    end,
+    --    {description = "mpc prev", group = "widgets"}),
+    --awful.key({ altkey, "Control" }, "Right",
+    --    function ()
+    --        awful.spawn.with_shell("mpc next")
+    --        beautiful.mpd.update()
+    --    end,
+    --    {description = "mpc next", group = "widgets"}),
+    --awful.key({ altkey }, "0",
+    --    function ()
+    --        local common = { text = "MPD widget ", position = "top_middle", timeout = 2 }
+    --        if beautiful.mpd.timer.started then
+    --            beautiful.mpd.timer:stop()
+    --            common.text = common.text .. lain.util.markup.bold("OFF")
+    --        else
+    --            beautiful.mpd.timer:start()
+    --            common.text = common.text .. lain.util.markup.bold("ON")
+    --        end
+    --        naughty.notify(common)
+    --    end,
+    --    {description = "mpc on/off", group = "widgets"}),
 
     -- Copy primary to clipboard (terminals to gtk)
     --awful.key({ modkey }, "c", function () awful.spawn("xsel | xsel -i -b") end,
@@ -658,7 +673,7 @@ globalkeys = my_table.join(
     --]]
     -- dmenu
     awful.key({ modkey }, "x", function ()
-        awful.spawn(string.format("dmenu_run -i -fn 'Monospace' -nb '%s' -nf '%s' -sb '%s' -sf '%s'",
+        awful.spawn(string.format("dmenu_run -i -fn 'xos4 Terminus 10' -nb '%s' -nf '%s' -sb '%s' -sf '%s'",
         beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
 		end,
         {description = "show dmenu", group = "launcher"}),
