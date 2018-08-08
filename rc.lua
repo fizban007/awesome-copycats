@@ -83,7 +83,8 @@ local editor       = os.getenv("EDITOR") or "emacsclient -t"
 local gui_editor   = "emacsclient -c"
 local browser      = "firefox"
 local guieditor    = "emacsclient -c"
-local scrlocker    = "xscreensaver-command -lock"
+--local scrlocker    = "xscreensaver-command -lock"
+local scrlocker    = "gnome-screensaver-command --lock"
 local filemanager  = "dolphin"
 
 awful.util.terminal = terminal
@@ -673,7 +674,7 @@ globalkeys = my_table.join(
     --]]
     -- dmenu
     awful.key({ modkey }, "x", function ()
-        awful.spawn(string.format("dmenu_run -i -fn 'xos4 Terminus 10' -nb '%s' -nf '%s' -sb '%s' -sf '%s'",
+        awful.spawn(string.format("dmenu_run -i -fn 'xos4 Terminus-10' -nb '%s' -nf '%s' -sb '%s' -sf '%s'",
         beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
 		end,
         {description = "show dmenu", group = "launcher"}),
@@ -691,8 +692,14 @@ globalkeys = my_table.join(
                     history_path = awful.util.get_cache_dir() .. "/history_eval"
                   }
               end,
-              {description = "lua execute prompt", group = "awesome"})
+              {description = "lua execute prompt", group = "awesome"}),
     --]]
+    -- password helper
+    awful.key({ modkey }, "F3",
+      function ()
+        awful.spawn(string.format("passmenu -fn 'xos4 Terminus-10'"))
+      end,
+      {description = "Run passmenu", group = "awesome"})
 )
 
 clientkeys = my_table.join(
