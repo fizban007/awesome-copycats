@@ -208,7 +208,7 @@ local cpu = lain.widget.cpu({
 })
 
 -- Coretemp (lm_sensors, per core)
-local tempwidget = awful.widget.watch({awful.util.shell, '-c', 'sensors | grep CPUTIN'}, 30,
+local tempwidget = awful.widget.watch({awful.util.shell, '-c', 'sensors | grep CPU'}, 30,
 function(widget, stdout)
     local temps = ""
     for line in stdout:gmatch("[^\r\n]+") do
@@ -227,7 +227,7 @@ end)
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 
 -- / fs
-local fsicon = wibox.widget.imagebox(theme.widget_hdd)
+--local fsicon = wibox.widget.imagebox(theme.widget_hdd)
 --[[ commented because it needs Gio/Glib >= 2.54
 theme.fs = lain.widget.fs({
     notification_preset = { fg = theme.fg_normal, bg = theme.bg_normal, font = "xos4 Terminus 10" },
@@ -369,18 +369,19 @@ function theme.at_screen_connect(s)
             wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, 3, 4), "#4B696D"),
             arrow("#4B696D", "#4B3B51"),
             wibox.container.background(wibox.container.margin(wibox.widget { tempicon, tempwidget, layout = wibox.layout.align.horizontal }, 4, 4), "#4B3B51"),
-            arrow("#4B3B51", "#CB755B"),
-            wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#CB755B"),
-            arrow("#CB755B", "#C0C0A2"),
-            --wibox.container.background(wibox.container.margin(wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#8DAA9A"),
-            --arrow("#8DAA9A", "#C0C0A2"),
+            --arrow("#4B3B51", "#CB755B"),
+            arrow("#4B3B51", "#8DAA9A"),
+            --wibox.container.background(wibox.container.margin(wibox.widget { fsicon, theme.fs.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#CB755B"),
+            --arrow("#CB755B", "#8DAA9A"),
+            wibox.container.background(wibox.container.margin(wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#8DAA9A"),
+            arrow("#8DAA9A", "#C0C0A2"),
             wibox.container.background(wibox.container.margin(wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }, 3, 3), "#C0C0A2"),
             arrow("#C0C0A2", "#777E76"),
             wibox.container.background(wibox.container.margin(binclock.widget, 4, 8), "#777E76"),
             arrow("#777E76", "alpha"),
             --]]
             s.mylayoutbox,
-            wibox.container.margin(scissors, 4, 8),
+            --wibox.container.margin(scissors, 4, 8),
             wibox.widget.systray(),
         },
     }

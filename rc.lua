@@ -57,7 +57,7 @@ local function run_once(cmd_arr)
     end
 end
 
-run_once({ "unclutter -root" }) -- entries must be comma-separated
+--run_once({ "unclutter -root" }) -- entries must be comma-separated
 -- }}}
 
 -- {{{ Variable definitions
@@ -81,6 +81,7 @@ local altkey       = "Mod1"
 local terminal     = "konsole" or "urxvtc"
 local editor       = os.getenv("EDITOR") or "emacsclient -t"
 local gui_editor   = "emacsclient -c"
+--local browser      = "google-chrome-stable"
 local browser      = "firefox"
 local guieditor    = "emacsclient -c"
 --local scrlocker    = "xscreensaver-command -lock"
@@ -569,8 +570,8 @@ globalkeys = my_table.join(
     -- Widgets popups
     awful.key({ altkey, }, "c", function () lain.widget.calendar.show(7) end,
               {description = "show calendar", group = "widgets"}),
-    awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
-              {description = "show filesystem", group = "widgets"}),
+    --awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
+              --{description = "show filesystem", group = "widgets"}),
     awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
               {description = "show weather", group = "widgets"}),
 
